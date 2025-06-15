@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    networks:
+      - restaurant_network
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    env_file: .env
+
+networks:
+  restaurant_network:
+    external: true
