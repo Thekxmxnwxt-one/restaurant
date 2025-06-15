@@ -1,0 +1,90 @@
+<div class="add-menu-form">
+  <h3>เพิ่มเมนูอาหารใหม่</h3>
+  <form (ngSubmit)="addMenu()" #menuForm="ngForm" novalidate>
+
+    <div class="form-row">
+      <div class="form-group half-width">
+        <label for="name">ชื่อเมนู <span class="required">*</span></label>
+        <input id="name" type="text" name="name" [(ngModel)]="newMenu.name" required />
+      </div>
+
+      <div class="form-group half-width">
+        <label for="image_url">ลิงก์รูปภาพ</label>
+        <input id="image_url" type="text" name="image_url" [(ngModel)]="newMenu.image_url" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">รายละเอียด</label>
+      <textarea id="description" name="description" [(ngModel)]="newMenu.description" rows="3"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half-width">
+        <label for="price">ราคา (บาท) <span class="required">*</span></label>
+        <input id="price" type="number" name="price" [(ngModel)]="newMenu.price" required min="0" />
+      </div>
+
+      <div class="form-group half-width">
+        <label for="category">หมวดหมู่</label>
+        <select id="category" name="category" [(ngModel)]="newMenu.category">
+          <option value="" disabled selected>-- เลือกหมวดหมู่ --</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        <input type="checkbox" name="available" [(ngModel)]="newMenu.available" />
+        พร้อมให้บริการ
+      </label>
+    </div>
+
+    <button type="submit" [disabled]="menuForm.invalid">💾 บันทึกเมนู</button>
+  </form>
+</div>
+
+<div class="menu-container">
+    <h2>เมนูอาหาร</h2>
+    <div *ngIf="menus.length === 0">
+        <p>ไม่มีเมนูที่เปิดให้สั่งในขณะนี้</p>
+    </div>
+    <div class="menu-list">
+        <div class="menu-item" *ngFor="let menu of menus">
+            <img [src]="menu.image_url" alt="{{ menu.name }}" class="menu-image" />
+        
+            <div class="menu-details">
+                <ng-container *ngIf="editingMenuId === menu.id; else viewMode">
+                    <input type="text" [(ngModel)]="menu.name" />
+                    <textarea [(ngModel)]="menu.description"></textarea>
+                    <input type="number" [(ngModel)]="menu.price" />
+                    <input type="text" [(ngModel)]="menu.image_url" />
+                    <select [(ngModel)]="menu.category">
+                        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                    </select>
+                    <label>
+                        <input type="checkbox" [(ngModel)]="menu.available" />
+                            พร้อมให้บริการ
+                    </label>
+                    <div class="admin-buttons">
+                        <button class="save-btn" (click)="saveEdit(menu)">✅ บันทึก</button>
+                        <button class="cancel-btn" (click)="cancelEdit()">❌ ยกเลิก</button>
+                    </div>
+                </ng-container>
+            
+                <ng-template #viewMode>
+                    <h3>{{ menu.name }}</h3>
+                    <p>{{ menu.description }}</p>
+                    <p class="price">{{ menu.price | currency:'THB':'symbol':'1.2-2' }}</p>
+                
+                    <div class="admin-buttons">
+                        <button class="edit-btn" (click)="startEdit(menu)">✏️ แก้ไข</button>
+                        <button class="delete-btn" (click)="deleteMenu(menu.id)">🗑 ลบ</button>
+                    </div>
+                </ng-template>
+            
+            </div>
+        </div>
+    </div>
+</div>

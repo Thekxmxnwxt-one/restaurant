@@ -1,0 +1,18 @@
+<div class="login-container">
+  <h2>เข้าสู่ระบบ</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">ชื่อผู้ใช้</label>
+      <input id="username" formControlName="username" type="text" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">รหัสผ่าน</label>
+      <input id="password" formControlName="password" type="password" />
+    </div>
+
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" [disabled]="loading">เข้าสู่ระบบ</button>
+  </form>
+</div>
